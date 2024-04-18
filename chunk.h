@@ -25,6 +25,8 @@
 #define CHUNK_H
 
 #include "types.h"
+#include <stdlib.h>
+#include <string.h>
 
 struct chunk
 {
@@ -36,5 +38,8 @@ struct chunk
 
 void chsumtable(u32 *table);
 u32 checksum32(u32 *table, u8 *b, u64 len);
+
+u8* chunk_checksum_buf(struct chunk *chunk);
+void chunk_checksum(struct chunk *chunk);
 
 #endif

@@ -51,3 +51,29 @@ u32 checksum32(u32 *table, u8 *b, u64 len)
 
   return c ^ 0xffffffffL;
 }
+
+u8* chunk_checksum_buf(struct chunk *chunk)
+{
+  if (chunk->len) {
+    u8 *buf = (u8*) malloc(chunk->len + 4);
+    memcpy(buf, chunk->type, 4);
+    memcpy(buf + 4, chunk->data, chunk->len);
+    return buf;
+  } else {
+    u8 *buf = (u8*) malloc(4);
+    memcpy(buf, chunk->type, 4);
+    return buf;
+  }
+}
+
+void chunk_checksum(struct chunk *chunk)
+{
+  u32 table[256];
+  u8 *buf;
+
+  chsumtable(table);
+
+  buf = chunk_checksum_buf(chunk);
+  chunk->check = checksum32(table, buf, chunk->len + 4);
+  free(buf);
+}

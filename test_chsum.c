@@ -26,11 +26,16 @@
 
 int main(void)
 {
-  u32 crctable[256];
-  chsumtable(crctable);
+  char type[] = "IEND";
+  struct chunk iend;
 
-  u8 data[] = {0x49, 0x45, 0x4E, 0x44};
-  u32 ch = checksum32(crctable, data, 4);
-  printf("%08X", ch);
+  iend.len = 0;
+  iend.data = 0;
+  memcpy(&iend.type, type, 4);
+
+  chunk_checksum(&iend);
+
+  printf("%08X", iend.check);
+
   return 0;
 }
