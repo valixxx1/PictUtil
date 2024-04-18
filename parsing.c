@@ -21,27 +21,47 @@
  *  SOFTWARE.
  */
 
-#ifndef CHUNK_H
-#define CHUNK_H
-
+#include "parsing.h"
 #include "types.h"
-#include <stdlib.h>
-#include <string.h>
+#include "chunk.h"
 
-struct chunk
-{
-  u32  len;     /* Length of data */
-  char type[4]; /* Type of chunk  */
-  u8   *data;   /* Data           */
-  u32  check;   /* Checksum       */
+union word32 {
+  u32 word;
+  struct {
+    u8 b4;
+    u8 b3;
+    u8 b2;
+    u8 b1;
+  } bytes;
 };
 
-void chsumtable(u32 *table);
-u32 checksum32(u32 *table, u8 *b, u64 len);
+void read_chunk(fl *f, struct chunk *chunk)
+{
+  union word32 w;
+  w.bytes.b1 = fgetc(f);
+  w.bytes.b2 = fgetc(f);
+  w.bytes.b3 = fgetc(f);
+  w.bytes.b4 = fgetc(f);
+  chunk->len = w.word;
 
-u8* chunk_checksum_buf(struct chunk *chunk);
-void chunk_checksum(struct chunk *chunk);
+  w.bytes.b1 = fgetc(f);
+  w.bytes.b2 = fgetc(f);
+  w.bytes.b3 = fgetc(f);
+  w.bytes.b4 = fgetc(f);
+  chunk->type[0] = w.bytes.b1;
+  chunk->type[1] = w.bytes.b2;
+  chunk->type[2] = w.bytes.b3;
+  chunk->type[3] = w.bytes.b4;
 
-void chunk_debug(struct chunk *chunk);
+  u8 *data = malloc(chunk->len);
+  for (u64 i = 0; i < chunk->len; i++) {
+    data[i] = fgetc(f);
+  }
+  chunk->data = data;
 
-#endif
+  w.bytes.b1 = fgetc(f);
+  w.bytes.b2 = fgetc(f);
+  w.bytes.b3 = fgetc(f);
+  w.bytes.b4 = fgetc(f);
+  chunk->check = w.word;
+}

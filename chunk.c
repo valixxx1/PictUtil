@@ -23,6 +23,7 @@
 
 #include "chunk.h"
 #include "types.h"
+#include "errs.h"
 
 void chsumtable(u32 *table)
 {
@@ -76,4 +77,15 @@ void chunk_checksum(struct chunk *chunk)
   buf = chunk_checksum_buf(chunk);
   chunk->check = checksum32(table, buf, chunk->len + 4);
   free(buf);
+}
+
+void chunk_debug(struct chunk *chunk)
+{
+  printf("%d\n", chunk->len);
+  printf("%c%c%c%c\n", chunk->type[0], chunk->type[1], chunk->type[2], chunk->type[3]);
+  for (u64 i = 0; i < chunk->len; i++) {
+    pbyte(chunk->data[i]);
+  }
+  putchar('\n');
+  printf("%08X\n", chunk->check);
 }

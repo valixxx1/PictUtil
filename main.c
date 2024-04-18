@@ -22,13 +22,16 @@
  */
 
 #include <stdio.h>
+#include "chunk.h"
 #include "types.h"
 #include "errs.h"
+#include "parsing.h"
 
 #define _1arg argv[1]
 
 t32 main(t32 argc, char *argv[])
 {
+  struct chunk chunk;
   char ch;
   fl *f;
 
@@ -36,7 +39,7 @@ t32 main(t32 argc, char *argv[])
     err(_2fewargs, -1);
   }
 
-  f = fopen(_1arg, "r");
+  f = fopen(_1arg, "rb");
 
   if (!f) {
     err(fnread, -2);
@@ -46,6 +49,11 @@ t32 main(t32 argc, char *argv[])
     ch = fgetc(f);
     pbyte(ch);
   }
+  putchar('\n');
+
+  read_chunk(f, &chunk);
+  chunk_debug(&chunk);
+  free(chunk.data);
 
   return 0;
 }

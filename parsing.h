@@ -21,27 +21,12 @@
  *  SOFTWARE.
  */
 
-#ifndef CHUNK_H
-#define CHUNK_H
+#ifndef PARSING_H
+#define PARSING_H
 
+#include "chunk.h"
 #include "types.h"
-#include <stdlib.h>
-#include <string.h>
 
-struct chunk
-{
-  u32  len;     /* Length of data */
-  char type[4]; /* Type of chunk  */
-  u8   *data;   /* Data           */
-  u32  check;   /* Checksum       */
-};
-
-void chsumtable(u32 *table);
-u32 checksum32(u32 *table, u8 *b, u64 len);
-
-u8* chunk_checksum_buf(struct chunk *chunk);
-void chunk_checksum(struct chunk *chunk);
-
-void chunk_debug(struct chunk *chunk);
+void read_chunk(fl *f, struct chunk *chunk);
 
 #endif
