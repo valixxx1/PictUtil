@@ -21,21 +21,16 @@
  *  SOFTWARE.
  */
 
-#ifndef ERRS_H
-#define ERRS_H
+#include <stdio.h>
+#include "chunk.h"
 
-#include <stdlib.h>
+int main(void)
+{
+  u32 crctable[256];
+  chsumtable(crctable);
 
-#define err(msg, code)  \
-  do {                  \
-    fputs(msg, stderr); \
-    exit(code);         \
-  } while (0)
-
-#define pbyte(byte) \
-  printf("%02X\n", (u8) byte)
-
-#define _2fewargs "Too few arguments!\n"
-#define fnread    "File wasn't read!\n"
-
-#endif
+  u8 data[] = {0x49, 0x45, 0x4E, 0x44};
+  u32 ch = checksum32(crctable, data, 4);
+  printf("%08X", ch);
+  return 0;
+}

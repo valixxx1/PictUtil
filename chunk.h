@@ -21,21 +21,20 @@
  *  SOFTWARE.
  */
 
-#ifndef ERRS_H
-#define ERRS_H
+#ifndef CHUNK_H
+#define CHUNK_H
 
-#include <stdlib.h>
+#include "types.h"
 
-#define err(msg, code)  \
-  do {                  \
-    fputs(msg, stderr); \
-    exit(code);         \
-  } while (0)
+struct chunk
+{
+  u32  len;     /* Length of data */
+  char type[4]; /* Type of chunk  */
+  u8   *data;   /* Data           */
+  u32  check;   /* Checksum       */
+};
 
-#define pbyte(byte) \
-  printf("%02X\n", (u8) byte)
-
-#define _2fewargs "Too few arguments!\n"
-#define fnread    "File wasn't read!\n"
+void chsumtable(u32 *table);
+u32 checksum32(u32 *table, u8 *b, u64 len);
 
 #endif

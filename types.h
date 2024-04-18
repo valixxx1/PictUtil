@@ -39,7 +39,4 @@ typedef int8_t  t8;
 
 typedef FILE fl;
 
-#else
-#warning types.h double including!
-
 #endif

@@ -21,21 +21,33 @@
  *  SOFTWARE.
  */
 
-#ifndef ERRS_H
-#define ERRS_H
+#include "chunk.h"
+#include "types.h"
 
-#include <stdlib.h>
+void chsumtable(u32 *table)
+{
+  u32 c;
+  t32 n, k;
+  for (n = 0; n < 256; n++) {
+    c = (u32) n;
+    for (k = 0; k < 8; k++) {
+      if (c & 1)
+        c = 0xedb88320L ^ (c >> 1);
+      else
+        c = c >> 1;
+    }
+    table[n] = c;
+  }
+}
 
-#define err(msg, code)  \
-  do {                  \
-    fputs(msg, stderr); \
-    exit(code);         \
-  } while (0)
+u32 checksum32(u32 *table, u8 *b, u64 len)
+{
+  u32 c = 0xffffffffL;
+  u64 n;
 
-#define pbyte(byte) \
-  printf("%02X\n", (u8) byte)
+  for (n = 0; n < len; n++) {
+    c = table[(c ^ b[n]) & 0xff] ^ (c >> 8);
+  }
 
-#define _2fewargs "Too few arguments!\n"
-#define fnread    "File wasn't read!\n"
-
-#endif
+  return c ^ 0xffffffffL;
+}

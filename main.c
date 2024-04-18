@@ -29,8 +29,8 @@
 
 t32 main(t32 argc, char *argv[])
 {
+  char ch;
   fl *f;
-  t8 ch;
 
   if (argc < 2) {
     err(_2fewargs, -1);
