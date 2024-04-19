@@ -25,70 +25,9 @@
 #include "types.h"
 #include "errs.h"
 
-void
-chsumtable(u32 *table)
-{
-  t32 n, k;
-  u32 c;
-
-  for (n = 0; n < 256; n++)
-    {
-      c = (u32) n;
-      for (k = 0; k < 8; k++)
-        if (c & 1)
-          c = 0xedb88320L ^ (c >> 1);
-        else
-          c = c >> 1;
-      table[n] = c;
-    }
-}
-
-u32
-checksum32(u32 *table, u8 *b, u64 len)
-{
-  u32 c = 0xffffffffL; //TODO -1
-  u64 n;
-
-  for (n = 0; n < len; n++)
-    {
-      c = table[(c ^ b[n]) & 0xff] ^ (c >> 8);
-    }
-
-  return c ^ 0xffffffffL;
-}
-
-u8*
-chunk_checksum_buf(struct chunk *chunk)
-{
-  if (chunk->len)
-    {
-      u8 *buf = (u8*) malloc(chunk->len + 4);
-      memcpy(buf, chunk->type, 4);
-      memcpy(buf + 4, chunk->data, chunk->len);
-      return buf;
-    }
-  else
-    {
-      u8 *buf = (u8*) malloc(4);
-      memcpy(buf, chunk->type, 4);
-      return buf;
-    }
-}
 
 void
-chunk_checksum(struct chunk *chunk)
-{
-  u32 table[256];
-  u8 *buf;
-
-  chsumtable(table);
-
-  buf = chunk_checksum_buf(chunk);
-  chunk->check = checksum32(table, buf, chunk->len + 4);
-  free(buf);
-}
-
-void chunk_debug(struct chunk *chunk)
+chunk_debug(struct chunk *chunk)
 {
   printf("Length: %d\n", chunk->len);
   printf("Type: %c%c%c%c\nData: ", chunk->type[0], chunk->type[1],

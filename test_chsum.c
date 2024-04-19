@@ -22,7 +22,7 @@
  */
 
 #include <stdio.h>
-#include "chunk.h"
+#include "chsum.h"
 
 int
 main(void)

@@ -37,12 +37,6 @@ struct chunk
   u32  check;   /* Checksum       */
 };
 
-void chsumtable(u32 *table);
-u32 checksum32(u32 *table, u8 *b, u64 len);
-
-u8* chunk_checksum_buf(struct chunk *chunk);
-void chunk_checksum(struct chunk *chunk);
-
 void chunk_debug(struct chunk *chunk);
 
 #endif

@@ -21,12 +21,16 @@
  *  SOFTWARE.
  */
 
-#ifndef  PARSING_H
-# define PARSING_H
+#ifndef  CHSUM_H
+# define CHSUM_H
 
-# include "chunk.h"
-# include "types.h"
+#include "types.h"
+#include "chunk.h"
 
-void read_chunk(fl *f, struct chunk *chunk);
+void chsumtable(u32 *table);
+u32 checksum32(u32 *table, u8 *b, u64 len);
+
+u8* chunk_checksum_buf(struct chunk *chunk);
+void chunk_checksum(struct chunk *chunk);
 
 #endif

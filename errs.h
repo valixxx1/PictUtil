@@ -21,12 +21,12 @@
  *  SOFTWARE.
  */
 
-#ifndef ERRS_H
-#define ERRS_H
+#ifndef  ERRS_H
+# define ERRS_H
 
-#include <stdlib.h>
+# include <stdlib.h>
 
-#define err(msg, code) \
+# define err(msg, code) \
   do \
     { \
       fputs(msg, stderr); \
@@ -34,10 +34,10 @@
     } \
   while (0)
 
-#define pbyte(byte) \
+# define pbyte(byte) \
   printf("%02X ", (u8) byte)
 
-#define _2fewargs "Too few arguments!\n"
-#define fnread    "File wasn't read!\n"
+# define _2fewargs "Too few arguments!\n"
+# define fnread    "File wasn't read!\n"
 
 #endif
