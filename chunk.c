@@ -81,11 +81,11 @@ void chunk_checksum(struct chunk *chunk)
 
 void chunk_debug(struct chunk *chunk)
 {
-  printf("%d\n", chunk->len);
-  printf("%c%c%c%c\n", chunk->type[0], chunk->type[1], chunk->type[2], chunk->type[3]);
+  printf("Length: %d\n", chunk->len);
+  printf("Type: %c%c%c%c\nData: ", chunk->type[0], chunk->type[1], chunk->type[2], chunk->type[3]);
   for (u64 i = 0; i < chunk->len; i++) {
     pbyte(chunk->data[i]);
   }
   putchar('\n');
-  printf("%08X\n", chunk->check);
+  printf("Checksum: %08X\n", chunk->check);
 }
