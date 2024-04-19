@@ -26,11 +26,13 @@
 
 #include <stdlib.h>
 
-#define err(msg, code)  \
-  do {                  \
-    fputs(msg, stderr); \
-    exit(code);         \
-  } while (0)
+#define err(msg, code) \
+  do \
+    { \
+      fputs(msg, stderr); \
+      exit(code); \
+    } \
+  while (0)
 
 #define pbyte(byte) \
   printf("%02X ", (u8) byte)

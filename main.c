@@ -29,26 +29,30 @@
 
 #define _1arg argv[1]
 
-t32 main(t32 argc, char *argv[])
+t32
+main(t32 argc, char *argv[])
 {
   struct chunk chunk;
   char ch;
   fl *f;
 
-  if (argc < 2) {
-    err(_2fewargs, -1);
-  }
+  if (argc < 2)
+    {
+      err(_2fewargs, -1);
+    }
 
   f = fopen(_1arg, "rb");
 
-  if (!f) {
-    err(fnread, -2);
-  }
+  if (!f)
+    {
+      err(fnread, -2);
+    }
 
-  for (u64 i = 0; i < 8; i++) {
-    ch = fgetc(f);
-    pbyte(ch);
-  }
+  for (u64 i = 0; i < 8; i++)
+    {
+      ch = fgetc(f);
+      pbyte(ch);
+    }
   putchar('\n');
 
   read_chunk(f, &chunk);

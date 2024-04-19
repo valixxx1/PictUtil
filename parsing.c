@@ -25,7 +25,19 @@
 #include "types.h"
 #include "chunk.h"
 
-union word32 {
+#define fill_word32(w) \
+  do \
+    { \
+      w.bytes.b1 = fgetc(f); \
+      w.bytes.b2 = fgetc(f); \
+      w.bytes.b3 = fgetc(f); \
+      w.bytes.b4 = fgetc(f); \
+    } \
+  while (0)
+
+
+union word32
+{
   u32 word;
   struct {
     u8 b4;
@@ -35,33 +47,26 @@ union word32 {
   } bytes;
 };
 
-void read_chunk(fl *f, struct chunk *chunk)
+void
+read_chunk(fl *f, struct chunk *chunk)
 {
   union word32 w;
-  w.bytes.b1 = fgetc(f);
-  w.bytes.b2 = fgetc(f);
-  w.bytes.b3 = fgetc(f);
-  w.bytes.b4 = fgetc(f);
+  fill_word32(w);
   chunk->len = w.word;
 
-  w.bytes.b1 = fgetc(f);
-  w.bytes.b2 = fgetc(f);
-  w.bytes.b3 = fgetc(f);
-  w.bytes.b4 = fgetc(f);
+  fill_word32(w);
   chunk->type[0] = w.bytes.b1;
   chunk->type[1] = w.bytes.b2;
   chunk->type[2] = w.bytes.b3;
   chunk->type[3] = w.bytes.b4;
 
   u8 *data = malloc(chunk->len);
-  for (u64 i = 0; i < chunk->len; i++) {
-    data[i] = fgetc(f);
-  }
+  for (u64 i = 0; i < chunk->len; i++)
+    {
+      data[i] = fgetc(f);
+    }
   chunk->data = data;
 
-  w.bytes.b1 = fgetc(f);
-  w.bytes.b2 = fgetc(f);
-  w.bytes.b3 = fgetc(f);
-  w.bytes.b4 = fgetc(f);
+  fill_word32(w);
   chunk->check = w.word;
 }

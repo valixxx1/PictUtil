@@ -24,7 +24,8 @@
 #include <stdio.h>
 #include "chunk.h"
 
-int main(void)
+int
+main(void)
 {
   char type[] = "IEND";
   struct chunk iend;
