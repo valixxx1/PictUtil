@@ -27,8 +27,6 @@
 #include "errs.h"
 #include "parsing.h"
 
-#define _1arg argv[1]
-
 t32
 main(t32 argc, char *argv[])
 {
@@ -37,16 +35,12 @@ main(t32 argc, char *argv[])
   fl *f;
 
   if (argc < 2)
-    {
-      err(_2fewargs, -1);
-    }
+    err(_2fewargs, -1);
 
-  f = fopen(_1arg, "rb");
+  f = fopen(argv[1], "rb");
 
   if (!f)
-    {
-      err(fnread, -2);
-    }
+    err(fnread, -2);
 
   for (u64 i = 0; i < 8; i++)
     {
@@ -56,7 +50,8 @@ main(t32 argc, char *argv[])
   putchar('\n');
 
   read_chunk(f, &chunk);
-  chunk_debug(&chunk);
+  //chunk_debug(&chunk);
+  printf("Width: %d\n", (u32) chunk.data[0]);
   free(chunk.data);
 
   return 0;

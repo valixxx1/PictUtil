@@ -62,9 +62,7 @@ read_chunk(fl *f, struct chunk *chunk)
 
   u8 *data = malloc(chunk->len);
   for (u64 i = 0; i < chunk->len; i++)
-    {
-      data[i] = fgetc(f);
-    }
+    data[i] = fgetc(f);
   chunk->data = data;
 
   fill_word32(w);

@@ -28,13 +28,27 @@
 # include <stdlib.h>
 # include <string.h>
 
+struct ihdr
+{
+  u32 width;  /* Img width          */
+  u32 height; /* Img height         */
+  u8 bd;      /* Bit depth          */
+  u8 cm;      /* Color model        */
+  u8 zp;      /* Compress method    */
+  u8 fm;      /* Filter method      */
+  u8 im;      /* Interlacing method */
+};
 
 struct chunk
 {
-  u32  len;     /* Length of data */
-  char type[4]; /* Type of chunk  */
-  u8   *data;   /* Data           */
-  u32  check;   /* Checksum       */
+  u32 len;             /* Data len */
+  char type[4];        /* Chunk type */
+  union
+  {
+    u8 *data;          /* Data */
+    struct ihdr *ihdr; /* IHDR */
+  };
+  u32 check;           /* Checksum */
 };
 
 void chunk_debug(struct chunk *chunk);
