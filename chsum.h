@@ -22,7 +22,7 @@
  */
 
 #ifndef  CHSUM_H
-# define CHSUM_H
+#define CHSUM_H
 
 #include "types.h"
 #include "chunk.h"
@@ -30,7 +30,7 @@
 void chsumtable(u32 *table);
 u32 checksum32(u32 *table, u8 *b, u64 len);
 
-u8* chunk_checksum_buf(struct chunk *chunk);
-void chunk_checksum(struct chunk *chunk);
+u8* chunk_chsum_buf(struct chunk *chunk);
+void chunk_chsum(struct chunk *chunk);
 
 #endif

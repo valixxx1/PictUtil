@@ -50,7 +50,6 @@ main(t32 argc, char *argv[])
   putchar('\n');
 
   read_chunk(f, &chunk);
-  //chunk_debug(&chunk);
   printf("Width: %d\n", (u32) chunk.data[0]);
   free(chunk.data);
 

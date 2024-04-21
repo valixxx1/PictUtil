@@ -22,11 +22,11 @@
  */
 
 #ifndef CHUNK_H
-# define CHUNK_H
+#define CHUNK_H
 
-# include "types.h"
-# include <stdlib.h>
-# include <string.h>
+#include "types.h"
+#include <stdlib.h>
+#include <string.h>
 
 struct ihdr
 {
@@ -41,16 +41,14 @@ struct ihdr
 
 struct chunk
 {
-  u32 len;             /* Data len */
+  u32 len;             /* Data len   */
   char type[4];        /* Chunk type */
   union
   {
-    u8 *data;          /* Data */
-    struct ihdr *ihdr; /* IHDR */
+    u8 *data;          /* Data       */
+    struct ihdr *ihdr; /* IHDR       */
   };
-  u32 check;           /* Checksum */
+  u32 check;           /* Checksum   */
 };
-
-void chunk_debug(struct chunk *chunk);
 
 #endif

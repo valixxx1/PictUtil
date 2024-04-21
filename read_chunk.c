@@ -21,21 +21,37 @@
  *  SOFTWARE.
  */
 
-#include "chunk.h"
+#include "read_chunk.h"
 #include "types.h"
-#include "errs.h"
+#include "chunk.h"
 
+static u32 read_u32(fl *f)
+{
+  u32 res;
+  if (fread(&res, 4, 1, f) != 1) {
+    exit(76);
+  }
+  return res;
+}
 
 void
-chunk_debug(struct chunk *chunk)
+read_chunk(fl *f, struct chunk *chunk)
 {
-  printf("Length: %d\n", chunk->len);
-  printf("Type: %c%c%c%c\nData: ", chunk->type[0], chunk->type[1],
-      chunk->type[2], chunk->type[3]);
+  union word32 w;
+  fill_word32(w);
+  chunk->len = w.word;
+
+  fill_word32(w);
+  chunk->type[0] = w.bytes.b1;
+  chunk->type[1] = w.bytes.b2;
+  chunk->type[2] = w.bytes.b3;
+  chunk->type[3] = w.bytes.b4;
+
+  u8 *data = malloc(chunk->len);
   for (u64 i = 0; i < chunk->len; i++)
-    {
-      pbyte(chunk->data[i]);
-    }
-  putchar('\n');
-  printf("Checksum: %08X\n", chunk->check);
+    data[i] = fgetc(f);
+  chunk->data = data;
+
+  fill_word32(w);
+  chunk->check = w.word;
 }
