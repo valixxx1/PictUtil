@@ -21,37 +21,26 @@
  *  SOFTWARE.
  */
 
-#include "read_chunk.h"
-#include "types.h"
-#include "chunk.h"
+#pragma once
 
-static u32 read_u32(fl *f)
+#include "../types.h"
+#include <stdlib.h>
+#include <string.h>
+
+__BEGIN_DECLS
+
+struct ihdr
 {
-  u32 res;
-  if (fread(&res, 4, 1, f) != 1) {
-    exit(76);
-  }
-  return res;
-}
+  u32 len;    /* Len = 13           */
+  t8 type[4]; /* Type = IHDR        */
+  u32 width;  /* Img width          */
+  u32 height; /* Img height         */
+  u8 bd;      /* Bit depth          */
+  u8 cm;      /* Color model        */
+  u8 zp;      /* Compress method    */
+  u8 fm;      /* Filter method      */
+  u8 im;      /* Interlacing method */
+  u32 ch;     /* Checksum           */
+};
 
-void
-read_chunk(fl *f, struct chunk *chunk)
-{
-  union word32 w;
-  fill_word32(w);
-  chunk->len = w.word;
-
-  fill_word32(w);
-  chunk->type[0] = w.bytes.b1;
-  chunk->type[1] = w.bytes.b2;
-  chunk->type[2] = w.bytes.b3;
-  chunk->type[3] = w.bytes.b4;
-
-  u8 *data = malloc(chunk->len);
-  for (u64 i = 0; i < chunk->len; i++)
-    data[i] = fgetc(f);
-  chunk->data = data;
-
-  fill_word32(w);
-  chunk->check = w.word;
-}
+__END_DECLS

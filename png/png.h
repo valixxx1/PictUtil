@@ -21,22 +21,7 @@
  *  SOFTWARE.
  */
 
-#include <stdio.h>
-#include "chsum.h"
+#pragma once
 
-int
-main(void)
-{
-  char type[] = "IEND";
-  struct chunk iend;
-
-  iend.len = 0;
-  iend.data = 0;
-  memcpy(&iend.type, type, 4);
-
-  chunk_checksum(&iend);
-
-  printf("%08X", iend.check);
-
-  return 0;
-}
+#include "ihdr.h"
+#include "sign.h"

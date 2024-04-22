@@ -21,16 +21,45 @@
  *  SOFTWARE.
  */
 
-#ifndef  CHSUM_H
-#define CHSUM_H
+#include "bswap.h"
 
-#include "types.h"
-#include "chunk.h"
+void bswap(void *x, u64 s)
+{
+  char *p = x;
+  size_t lo, hi;
+  for(lo=0, hi=s-1; hi>lo; lo++, hi--) {
+    char tmp=p[lo];
+    p[lo] = p[hi];
+    p[hi] = tmp;
+  }
+}
 
-void chsumtable(u32 *table);
-u32 checksum32(u32 *table, u8 *b, u64 len);
+/*
+struct ihdr
+{
+  u32 len;
+  t8 type[4];
+  u32 width;
+  u32 height;
+  u8 bd;
+  u8 cm;
+  u8 zp;
+  u8 fm;
+  u8 im;
+  u32 ch;
+};
+*/
 
-u8* chunk_chsum_buf(struct chunk *chunk);
-void chunk_chsum(struct chunk *chunk);
-
-#endif
+void bswap_ihdr(struct ihdr *ihdr)
+{
+  bswap(&ihdr->len, 4);
+  bswap(&ihdr->type, 4);
+  bswap(&ihdr->height, 4);
+  bswap(&ihdr->width, 4);
+  bswap(&ihdr->bd, 1);
+  bswap(&ihdr->cm, 1);
+  bswap(&ihdr->zp, 1);
+  bswap(&ihdr->fm, 1);
+  bswap(&ihdr->im, 1);
+  bswap(&ihdr->ch, 4);
+}

@@ -21,34 +21,7 @@
  *  SOFTWARE.
  */
 
-#ifndef CHUNK_H
-#define CHUNK_H
+#pragma once
 
-#include "types.h"
-#include <stdlib.h>
-#include <string.h>
-
-struct ihdr
-{
-  u32 width;  /* Img width          */
-  u32 height; /* Img height         */
-  u8 bd;      /* Bit depth          */
-  u8 cm;      /* Color model        */
-  u8 zp;      /* Compress method    */
-  u8 fm;      /* Filter method      */
-  u8 im;      /* Interlacing method */
-};
-
-struct chunk
-{
-  u32 len;             /* Data len   */
-  char type[4];        /* Chunk type */
-  union
-  {
-    u8 *data;          /* Data       */
-    struct ihdr *ihdr; /* IHDR       */
-  };
-  u32 check;           /* Checksum   */
-};
-
-#endif
+#define PNG_SIGN     0x89504E470D0A1A0A
+#define PNG_SIGN_LEN 8

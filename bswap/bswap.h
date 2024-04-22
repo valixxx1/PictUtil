@@ -21,12 +21,16 @@
  *  SOFTWARE.
  */
 
-#ifndef  PARSING_H
-# define PARSING_H
+#pragma once
 
-# include "chunk.h"
-# include "types.h"
+#include "../types.h"
+#include "../png/ihdr.h"
 
-void read_chunk(fl *f, struct chunk *chunk);
+__BEGIN_DECLS
 
-#endif
+/* Swap S bytes in X */
+void bswap(void *x, u64 s);
+
+void bswap_ihdr(struct ihdr *ihdr);
+
+__END_DECLS

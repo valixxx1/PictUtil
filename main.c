@@ -21,37 +21,40 @@
  *  SOFTWARE.
  */
 
-#include <stdio.h>
-#include "chunk.h"
+#include "png/ihdr.h"
+#include "png/sign.h"
 #include "types.h"
-#include "errs.h"
-#include "parsing.h"
 
-t32
-main(t32 argc, char *argv[])
+#include "bswap/bswap.h"
+#include <stdio.h>
+
+int main(int argc, char *argv[])
 {
-  struct chunk chunk;
-  char ch;
+  struct ihdr ihdr;
+  u64 sign;
   fl *f;
 
-  if (argc < 2)
-    err(_2fewargs, -1);
+  if (argc < 2) {
+    fputs("Too few arguments!\n", stderr);
+    return 1;
+  }
 
   f = fopen(argv[1], "rb");
 
-  if (!f)
-    err(fnread, -2);
+  if (!f) {
+    perror("Image wasn't opened");
+    return 2;
+  }
 
-  for (u64 i = 0; i < 8; i++)
-    {
-      ch = fgetc(f);
-      pbyte(ch);
-    }
-  putchar('\n');
+  fread(&sign, 8, 1, f);
+  bswap(&sign, 8);
 
-  read_chunk(f, &chunk);
-  printf("Width: %d\n", (u32) chunk.data[0]);
-  free(chunk.data);
+  if (sign == PNG_SIGN) {
+    fread(&ihdr, sizeof(ihdr), 1, f);
+    bswap_ihdr(&ihdr);
+    printf("Width: %u\nHeight: %u\n", ihdr.width, ihdr.height);
+  }
 
+  fclose(f);
   return 0;
 }

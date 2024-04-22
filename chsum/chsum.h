@@ -21,23 +21,17 @@
  *  SOFTWARE.
  */
 
-#ifndef  ERRS_H
-# define ERRS_H
+#pragma once
 
-# include <stdlib.h>
+#include "../types.h"
+#include "../png/ihdr.h"
 
-# define err(msg, code) \
-  do \
-    { \
-      fputs(msg, stderr); \
-      exit(code); \
-    } \
-  while (0)
+__BEGIN_DECLS
 
-# define pbyte(byte) \
-  printf("%02X ", (u8) byte)
+void chsumtable(u32 *table);
+u32 checksum32(u32 *table, u8 *b, u64 len);
 
-# define _2fewargs "Too few arguments!\n"
-# define fnread    "File wasn't read!\n"
+u8* chunk_chsum_buf(struct chunk *chunk);
+void chunk_chsum(struct chunk *chunk);
 
-#endif
+__END_DECLS
