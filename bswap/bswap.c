@@ -23,6 +23,7 @@
 
 #include "bswap.h"
 
+/* https://stackoverflow.com/questions/2182002/how-to-convert-big-endian-to-little-endian-in-c-without-using-library-functions */
 void bswap(void *x, u64 s)
 {
   char *p = x;
@@ -34,32 +35,11 @@ void bswap(void *x, u64 s)
   }
 }
 
-/*
-struct ihdr
-{
-  u32 len;
-  t8 type[4];
-  u32 width;
-  u32 height;
-  u8 bd;
-  u8 cm;
-  u8 zp;
-  u8 fm;
-  u8 im;
-  u32 ch;
-};
-*/
-
 void bswap_ihdr(struct ihdr *ihdr)
 {
   bswap(&ihdr->len, 4);
   bswap(&ihdr->type, 4);
   bswap(&ihdr->height, 4);
   bswap(&ihdr->width, 4);
-  bswap(&ihdr->bd, 1);
-  bswap(&ihdr->cm, 1);
-  bswap(&ihdr->zp, 1);
-  bswap(&ihdr->fm, 1);
-  bswap(&ihdr->im, 1);
   bswap(&ihdr->ch, 4);
 }

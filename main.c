@@ -21,40 +21,59 @@
  *  SOFTWARE.
  */
 
+#include "bswap/bswap.h"
 #include "png/ihdr.h"
 #include "png/sign.h"
 #include "types.h"
 
-#include "bswap/bswap.h"
+#include <stdbool.h>
+#include <unistd.h>
 #include <stdio.h>
+
+#define VERSION "v0.0.1"
 
 int main(int argc, char *argv[])
 {
   struct ihdr ihdr;
+  int getopt_res;
   u64 sign;
   fl *f;
 
-  if (argc < 2) {
-    fputs("Too few arguments!\n", stderr);
-    return 1;
+  bool size_flag = false, help_flag = false;
+
+  while ((getopt_res = getopt(argc, argv, "hs")) != -1) {
+    switch (getopt_res) {
+      case 'h':
+        help_flag = true;
+        break;
+      case 's':
+        size_flag = true;
+        break;
+    }
   }
 
-  f = fopen(argv[1], "rb");
 
-  if (!f) {
-    perror("Image wasn't opened");
-    return 2;
-  }
+  if (help_flag) {
+    printf("A photo redactor.\nVersion: %s\n\nOptions:\n\t-h: Write this help menu.\n\t-s: Print size of the image.\n", VERSION);
+  } else if (size_flag) {
+    f = fopen(argv[optind], "rb");
 
-  fread(&sign, 8, 1, f);
-  bswap(&sign, 8);
+    if (!f) {
+      perror("Image wasn't opened");
+      return 2;
+    }
 
-  if (sign == PNG_SIGN) {
-    fread(&ihdr, sizeof(ihdr), 1, f);
-    bswap_ihdr(&ihdr);
+    fread(&sign, 8, 1, f);
+    bswap(&sign, 8);
+    if (sign == PNG_SIGN) {
+      fread(&ihdr, sizeof(ihdr), 1, f);
+      bswap_ihdr(&ihdr);
+    }
+
     printf("Width: %u\nHeight: %u\n", ihdr.width, ihdr.height);
+
+    fclose(f);
   }
 
-  fclose(f);
   return 0;
 }
