@@ -23,13 +23,13 @@
 
 #pragma once
 
-#include "../types.h"
 #include "../png/ihdr.h"
+#include "../types.h"
+
+#include <byteswap.h>
+#include <string.h>
 
 __BEGIN_DECLS
-
-/* Swap S bytes in X */
-void bswap(void *x, u64 s);
 
 void bswap_ihdr(struct ihdr *ihdr);
 

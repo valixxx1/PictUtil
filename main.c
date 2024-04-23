@@ -21,41 +21,42 @@
  *  SOFTWARE.
  */
 
+#include "imgtype/imgtype.h"
+#include "helpmenu/help.h"
 #include "bswap/bswap.h"
+#include "logg/logg.h"
 #include "png/ihdr.h"
-#include "png/sign.h"
 #include "types.h"
 
 #include <stdbool.h>
 #include <unistd.h>
 #include <stdio.h>
 
-#define VERSION "v0.0.1"
+#define VERSION "v0.0.2"
 
 int main(int argc, char *argv[])
 {
   struct ihdr ihdr;
-  int getopt_res;
-  u64 sign;
+  t32 getopt_res;
+  t8 fmt;
   fl *f;
 
-  bool size_flag = false, help_flag = false;
+  bool size_flag = 0, help_flag = 0;
 
   while ((getopt_res = getopt(argc, argv, "hs")) != -1) {
     switch (getopt_res) {
       case 'h':
-        help_flag = true;
+        help_flag = 1;
         break;
       case 's':
-        size_flag = true;
+        size_flag = 1;
         break;
     }
   }
 
-
-  if (help_flag) {
-    printf("A photo redactor.\nVersion: %s\n\nOptions:\n\t-h: Write this help menu.\n\t-s: Print size of the image.\n", VERSION);
-  } else if (size_flag) {
+  if (help_flag)
+    helpmenu(VERSION);
+  else if (size_flag) {
     f = fopen(argv[optind], "rb");
 
     if (!f) {
@@ -63,9 +64,11 @@ int main(int argc, char *argv[])
       return 2;
     }
 
-    fread(&sign, 8, 1, f);
-    bswap(&sign, 8);
-    if (sign == PNG_SIGN) {
+    fmt = imgtype(f);
+
+    /* If PNG */
+    if (fmt == 'p') {
+      logg("log.txt", "PNG\n");
       fread(&ihdr, sizeof(ihdr), 1, f);
       bswap_ihdr(&ihdr);
     }

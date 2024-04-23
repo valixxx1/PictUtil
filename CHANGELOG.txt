@@ -1,0 +1,7 @@
+v0.0.1:
+  Added a helpmenu (-h option)
+  Added an option "-s" that gets width and height of PNG
+v0.0.2:
+  Added a log function
+  Fixed bugs
+  Cleaner code

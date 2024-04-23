@@ -21,26 +21,9 @@
  *  SOFTWARE.
  */
 
-#pragma once
+#include "help.h"
 
-#include "../types.h"
-#include <stdlib.h>
-#include <string.h>
-
-__BEGIN_DECLS
-
-struct ihdr
+void helpmenu(const char *version)
 {
-  u32 len;    /* Len = 13           */
-  t8 type[4]; /* Type = IHDR        */
-  u32 width;  /* Img width          */
-  u32 height; /* Img height         */
-  u8 bd;      /* Bit depth          */
-  u8 cm;      /* Color model        */
-  u8 zp;      /* Compress method    */
-  u8 fm;      /* Filter method      */
-  u8 im;      /* Interlacing method */
-  u32 ch;     /* Checksum           */
-} __attribute__ ((packed));
-
-__END_DECLS
+    printf("A photo redactor.\nVersion: %s\n\nOptions:\n\t-h: Write this help menu.\n\t-s: Print size of the image.\n", version);
+}

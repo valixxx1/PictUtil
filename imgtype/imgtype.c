@@ -21,26 +21,21 @@
  *  SOFTWARE.
  */
 
-#pragma once
+#include "imgtype.h"
 
-#include "../types.h"
-#include <stdlib.h>
-#include <string.h>
-
-__BEGIN_DECLS
-
-struct ihdr
+t8 imgtype(fl *f)
 {
-  u32 len;    /* Len = 13           */
-  t8 type[4]; /* Type = IHDR        */
-  u32 width;  /* Img width          */
-  u32 height; /* Img height         */
-  u8 bd;      /* Bit depth          */
-  u8 cm;      /* Color model        */
-  u8 zp;      /* Compress method    */
-  u8 fm;      /* Filter method      */
-  u8 im;      /* Interlacing method */
-  u32 ch;     /* Checksum           */
-} __attribute__ ((packed));
+  u64 sign_png;
 
-__END_DECLS
+  /* Testing PNG */
+  fread(&sign_png, 8, 1, f);
+  sign_png = bswap_64(sign_png);
+  if (sign_png == PNG_SIGN) {
+    return 'p';
+  }
+
+  fseek(f, 0, SEEK_SET);
+
+  /* No JPG testing because PictUtil isn't supporting JPG format. */
+  return '?';
+}

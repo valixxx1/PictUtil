@@ -23,23 +23,20 @@
 
 #include "bswap.h"
 
-/* https://stackoverflow.com/questions/2182002/how-to-convert-big-endian-to-little-endian-in-c-without-using-library-functions */
-void bswap(void *x, u64 s)
-{
-  char *p = x;
-  size_t lo, hi;
-  for(lo=0, hi=s-1; hi>lo; lo++, hi--) {
-    char tmp=p[lo];
-    p[lo] = p[hi];
-    p[hi] = tmp;
-  }
-}
-
 void bswap_ihdr(struct ihdr *ihdr)
 {
-  bswap(&ihdr->len, 4);
-  bswap(&ihdr->type, 4);
-  bswap(&ihdr->height, 4);
-  bswap(&ihdr->width, 4);
-  bswap(&ihdr->ch, 4);
+  union {
+    u32 word;
+    t8 b[4];
+  } type;
+
+  memcpy(type.b, ihdr->type, 4);
+
+  ihdr->len    = bswap_32(ihdr->len);
+  type.word    = bswap_32(type.word);
+  ihdr->height = bswap_32(ihdr->height);
+  ihdr->width  = bswap_32(ihdr->width);
+  ihdr->ch     = bswap_32(ihdr->ch);
+
+  memcpy(ihdr->type, type.b, 4);
 }

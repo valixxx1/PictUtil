@@ -23,24 +23,20 @@
 
 #pragma once
 
+#include "../png/sign.h"
 #include "../types.h"
-#include <stdlib.h>
-#include <string.h>
+
+#include <byteswap.h>
+#include <stdio.h>
 
 __BEGIN_DECLS
 
-struct ihdr
-{
-  u32 len;    /* Len = 13           */
-  t8 type[4]; /* Type = IHDR        */
-  u32 width;  /* Img width          */
-  u32 height; /* Img height         */
-  u8 bd;      /* Bit depth          */
-  u8 cm;      /* Color model        */
-  u8 zp;      /* Compress method    */
-  u8 fm;      /* Filter method      */
-  u8 im;      /* Interlacing method */
-  u32 ch;     /* Checksum           */
-} __attribute__ ((packed));
+/* Detect type of image in F file.
+ * Return values:
+ *   'p' - PNG
+ *   'j' - JPG
+ *   '?' - other
+ */
+t8 imgtype(fl *f);
 
 __END_DECLS
