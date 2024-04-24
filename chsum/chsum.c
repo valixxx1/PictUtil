@@ -28,15 +28,18 @@ void chsumtable(u32 *table)
   t32 n, k;
   u32 c;
 
-  for (n = 0; n < 256; n++) {
-    c = (u32) n;
-    for (k = 0; k < 8; k++)
-      if (c & 1)
-        c = 0xedb88320L ^ (c >> 1);
-      else
-        c = c >> 1;
-    table[n] = c;
-  }
+  for (n = 0; n < 256; n++)
+    {
+      c = (u32) n;
+      for (k = 0; k < 8; k++)
+        {
+          if (c & 1)
+            c = 0xedb88320L ^ (c >> 1);
+          else
+            c = c >> 1;
+        }
+      table[n] = c;
+    }
 }
 
 u32 checksum32(u32 *table, u8 *b, u64 len)
@@ -54,14 +57,17 @@ u8* chunk_chsum_buf(struct chunk *chunk)
 {
   u8 *buf;
 
-  if (chunk->len) {
-    buf = malloc(chunk->len + 4);
-    memcpy(buf, chunk->type, 4);
-    memcpy(buf + 4, chunk->data, chunk->len);
-  } else {
-    buf = malloc(4);
-    memcpy(buf, chunk->type, 4);
-  }
+  if (chunk->len)
+    {
+      buf = malloc(chunk->len + 4);
+      memcpy(buf, chunk->type, 4);
+      memcpy(buf + 4, chunk->data, chunk->len);
+    }
+  else
+    {
+      buf = malloc(4);
+      memcpy(buf, chunk->type, 4);
+    }
 
   return buf;
 }

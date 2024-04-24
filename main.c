@@ -32,7 +32,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-#define VERSION "v0.0.2"
+#define VERSION "v0.0.3"
 
 int main(int argc, char *argv[])
 {
@@ -43,40 +43,44 @@ int main(int argc, char *argv[])
 
   bool size_flag = 0, help_flag = 0;
 
-  while ((getopt_res = getopt(argc, argv, "hs")) != -1) {
-    switch (getopt_res) {
-      case 'h':
-        help_flag = 1;
-        break;
-      case 's':
-        size_flag = 1;
-        break;
+  while ((getopt_res = getopt(argc, argv, "hs")) != -1)
+    {
+      switch (getopt_res) {
+        case 'h':
+          help_flag = 1;
+          break;
+        case 's':
+          size_flag = 1;
+          break;
+      }
     }
-  }
 
   if (help_flag)
     helpmenu(VERSION);
-  else if (size_flag) {
-    f = fopen(argv[optind], "rb");
+  else if (size_flag)
+    {
+      f = fopen(argv[optind], "rb");
 
-    if (!f) {
-      perror("Image wasn't opened");
-      return 2;
+      if (!f)
+        {
+          perror("Image wasn't opened");
+          return 2;
+        }
+
+      fmt = imgtype(f);
+
+      /* If PNG */
+      if (fmt == 'p')
+        {
+          logg("log.txt", "PNG\n");
+          fread(&ihdr, sizeof(ihdr), 1, f);
+          bswap_ihdr(&ihdr);
+        }
+
+      printf("Width: %u\nHeight: %u\n", ihdr.width, ihdr.height);
+
+      fclose(f);
     }
-
-    fmt = imgtype(f);
-
-    /* If PNG */
-    if (fmt == 'p') {
-      logg("log.txt", "PNG\n");
-      fread(&ihdr, sizeof(ihdr), 1, f);
-      bswap_ihdr(&ihdr);
-    }
-
-    printf("Width: %u\nHeight: %u\n", ihdr.width, ihdr.height);
-
-    fclose(f);
-  }
 
   return 0;
 }

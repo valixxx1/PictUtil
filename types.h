@@ -28,15 +28,15 @@
 
 __BEGIN_DECLS
 
-typedef uint64_t u64;
-typedef uint32_t u32;
-typedef uint16_t u16;
-typedef uint8_t  u8;
+typedef unsigned long  u64;
+typedef unsigned int   u32;
+typedef unsigned short u16;
+typedef unsigned char  u8;
 
-typedef int64_t t64;
-typedef int32_t t32;
-typedef int16_t t16;
-typedef int8_t  t8;
+typedef long  t64;
+typedef int   t32;
+typedef short t16;
+typedef char  t8;
 
 typedef FILE fl;
 

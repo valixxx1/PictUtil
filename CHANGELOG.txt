@@ -5,3 +5,5 @@ v0.0.2:
   Added a log function
   Fixed bugs
   Cleaner code
+v0.0.3:
+  Added a makefile

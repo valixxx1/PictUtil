@@ -30,13 +30,14 @@ void logg(const char *path, const char *format, ...)
 
   va_start(args, format);
 
-  if (path) {
-    f = fopen(path, "a");
-    vfprintf(f, format, args);
-    fclose(f);
-  } else {
+  if (path)
+    {
+      f = fopen(path, "a");
+      vfprintf(f, format, args);
+      fclose(f);
+    }
+  else
     vprintf(format, args);
-  }
 
   va_end(args);
 }
